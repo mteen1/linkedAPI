@@ -1,0 +1,16 @@
+[project]
+name = "custom-scraper"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.13.3",
+    "bcrypt>=4.2.0",
+    "fastapi[standard]>=0.115.3",
+    "passlib>=1.7.4",
+    "playwright>=1.48.0",
+    "pydantic-settings>=2.6.0",
+    "pydantic>=2.9.2",
+    "sqlalchemy>=2.0.36",
+]
