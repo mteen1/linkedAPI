@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from .schemas import UserBase, UserCreate, UserUpdate
 from .models import User
-
+from .exceptions import UserNotFound
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -16,7 +16,10 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def get_user(db: Session, user_id: str):
-    return db.query(User).filter(User.user_id == user_id).first()
+    user = db.query(User).filter(User.user_id == user_id).first()
+    if not user:
+        raise UserNotFound(user_id=user_id)
+    return user
 
 
 def create_user(db: Session, request: UserCreate):
@@ -35,6 +38,8 @@ def create_user(db: Session, request: UserCreate):
 
 def update_user(db: Session, request: UserUpdate):
     user = db.query(User).filter(User.user_id == request.user_id).first()
+    if not user:
+        raise UserNotFound(user_id=request.user_id)
     user.name = request.name
     user.is_active = request.is_active
     user.is_superuser = request.is_superuser
@@ -46,6 +51,8 @@ def update_user(db: Session, request: UserUpdate):
 
 def delete_user(db: Session, user_id: str):
     user = db.query(User).filter(User.user_id == user_id).first()
+    if not user:
+        raise UserNotFound(user_id=user_id)
     db.delete(user)
     db.commit()
     return user

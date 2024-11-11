@@ -3,7 +3,6 @@ from config.database import get_db
 from src.users import services
 from .schemas import UserCreate, UserResponse, UserUpdate
 from .models import User
-from typing import List
 
 router = APIRouter()
 
